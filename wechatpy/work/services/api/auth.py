@@ -37,9 +37,12 @@ class WeChatAuth(BaseWeChatAPI):
         :param auth_type: 授权类型：0 正式授权， 1 测试授权。 默认值为0。注意，请确保应用在正式发布后的授权类型为“正式授权”
         :return: 返回的 JSON 数据包
         """
+        session_info = {"auth_type": auth_type}
+        if app_id:
+            session_info['appid'] = app_id
         return self._post(
             "service/set_session_info",
-            data={"pre_auth_code": pre_auth_code, "session_info": {"appid": app_id, "auth_type": auth_type}},
+            data={"pre_auth_code": pre_auth_code, "session_info": session_info},
         )
 
     def get_permanent_code(self, auth_code):
