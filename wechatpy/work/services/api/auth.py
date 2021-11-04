@@ -25,6 +25,23 @@ class WeChatAuth(BaseWeChatAPI):
             "service/get_pre_auth_code",
         )
 
+    def set_session_info(self, pre_auth_code, app_id=None, auth_type=0):
+        """
+        设置授权配置
+
+        详情请参考
+        https://open.work.weixin.qq.com/api/doc/90001/90143/90602
+        :param pre_auth_code: 预授权码
+        :param app_id: 允许进行授权的应用id，如1、2、3， 不填或者填空数组都表示允许授权套件内所有应用
+                       （仅旧的多应用套件可传此参数，新开发者可忽略）
+        :param auth_type: 授权类型：0 正式授权， 1 测试授权。 默认值为0。注意，请确保应用在正式发布后的授权类型为“正式授权”
+        :return: 返回的 JSON 数据包
+        """
+        return self._post(
+            "service/set_session_info",
+            data={"pre_auth_code": pre_auth_code, "session_info": {"appid": app_id, "auth_type": auth_type}},
+        )
+
     def get_permanent_code(self, auth_code):
         """
         获取企业永久授权码
