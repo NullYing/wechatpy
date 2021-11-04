@@ -22,7 +22,7 @@ class WeChatAuth(BaseWeChatAPI):
         :return: 返回的 JSON 数据包
         """
         return self._get(
-            "service/get_permanent_code",
+            "service/get_pre_auth_code",
         )
 
     def get_permanent_code(self, auth_code):
