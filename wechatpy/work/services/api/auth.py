@@ -39,7 +39,7 @@ class WeChatAuth(BaseWeChatAPI):
         """
         session_info = {"auth_type": auth_type}
         if app_id:
-            session_info['appid'] = app_id
+            session_info["appid"] = app_id
         return self._post(
             "service/set_session_info",
             data={"pre_auth_code": pre_auth_code, "session_info": session_info},
