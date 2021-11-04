@@ -13,6 +13,18 @@ class WeChatAuth(BaseWeChatAPI):
     新的授权体系有部分接口未实现，欢迎提交 PR。
     """
 
+    def get_pre_auth_code(self):
+        """
+        获取预授权码
+
+        详情请参考
+        https://open.work.weixin.qq.com/api/doc/90001/90143/90601
+        :return: 返回的 JSON 数据包
+        """
+        return self._get(
+            "service/get_permanent_code",
+        )
+
     def get_permanent_code(self, auth_code):
         """
         获取企业永久授权码
