@@ -233,8 +233,5 @@ class WeChatUser(BaseWeChatAPI):
         :param limit: 分页，预期请求的数据量，取值范围 1 ~ 10000
         :return:
         """
-        resp = self._post("user/list_id", data={
-            "cursor": cursor,
-	        "limit": limit
-        })
+        resp = self._post("user/list_id", data={"cursor": cursor, "limit": limit})
         return resp
