@@ -220,7 +220,7 @@ class WeChatUser(BaseWeChatAPI):
         resp = self._post("user/getuserid", data={"mobile": mobile})
         return resp["userid"]
 
-    def list_id(self, cursor: str, limit: int = 10000) -> int:
+    def list_id(self, cursor: str, limit: int = 10000) -> dict:
         """
         获取成员ID列表
 
