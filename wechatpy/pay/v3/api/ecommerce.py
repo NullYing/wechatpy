@@ -137,7 +137,11 @@ class WeChatEcommerce(BaseWeChatPayAPI):
             "account_number": account_number,
             "account_name": account_name,
         }
-        return self._post(f"apply4sub/sub_merchants/{sub_mchid}/modify-settlement", json=data)
+        post_data = {}
+        for key, val in data.items():
+            if val is not None:
+                post_data[key] = val
+        return self._post(f"apply4sub/sub_merchants/{sub_mchid}/modify-settlement", json=post_data)
 
     def settlement_query(self, sub_mchid):
         """
