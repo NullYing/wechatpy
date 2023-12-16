@@ -243,3 +243,20 @@ class WeChatKF(BaseWeChatAPI):
             "end_time": end_time,
         }
         return self._post("kf/get_servicer_statistic", data=data)
+
+    def account_update(self, open_kfid, name, media_id):
+        """
+        修改客服账号
+
+        :param open_kfid: 客服帐号ID
+        :param name: 客服名称
+        :param media_id: 客服头像临时素材
+
+        :return: 接口调用结果
+        """
+        data = {
+            "open_kfid": open_kfid,
+            "name": name,
+            "media_id": media_id
+        }
+        return self._post("kf/account/update", data=data)
