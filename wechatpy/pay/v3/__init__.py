@@ -105,10 +105,12 @@ class WeChatPay:
     def download_file(self, url, method="get", headers=None, **kwargs):
         nonce_str = random_string(32).upper()
         timestamp = str(int(time.time()))
+        url_parse = urlparse(url)
+        endpoint = f"{url_parse.path}?{url_parse.query}"
         sign = calculate_signature_rsa(
             self.apiclient_key,
             method,
-            url,
+            endpoint,
             "",
             nonce_str=nonce_str,
             timestamp=timestamp,
