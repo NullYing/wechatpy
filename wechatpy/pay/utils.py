@@ -232,4 +232,4 @@ def get_serial_no(cert_pem):
 
 def filter_none_values(dict_obj):
     filtered_data = {k: v for k, v in dict_obj.items() if v is not None}
-    return json.dumps(filtered_data)
+    return filtered_data
