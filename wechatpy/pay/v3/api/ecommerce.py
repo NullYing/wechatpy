@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+from wechatpy.pay.utils import filter_none_values
 from wechatpy.pay.v3.api.base import BaseWeChatPayAPI
 
 
@@ -476,7 +476,7 @@ class WeChatEcommerce(BaseWeChatPayAPI):
         :return: 返回的结果数据
         """
         query = {"bill_date": bill_date, "sub_mchid": sub_mchid, "bill_type": bill_type, "tar_type": tar_type}
-        return self._get("bill/tradebill", params=query)
+        return self._get("bill/tradebill", params=filter_none_values(query))
 
     def fund_flow_bill(self, bill_date, account_type="BASIC", tar_type=None):
         """
@@ -488,7 +488,7 @@ class WeChatEcommerce(BaseWeChatPayAPI):
         :return: 返回的结果数据
         """
         query = {"bill_date": bill_date, "account_type": account_type, "tar_type": tar_type}
-        return self._get("bill/fundflowbill", params=query)
+        return self._get("bill/fundflowbill", params=filter_none_values(query))
 
     def profit_sharing_bill(self, bill_date, tar_type=None, sub_mchid=None):
         """
@@ -504,7 +504,7 @@ class WeChatEcommerce(BaseWeChatPayAPI):
             "tar_type": tar_type,
             "sub_mchid": sub_mchid,
         }
-        return self._get("profitsharing/bills", params=query)
+        return self._get("profitsharing/bills", params=filter_none_values(query))
 
     def eco_fund_flow_bill(
             self,
@@ -523,7 +523,7 @@ class WeChatEcommerce(BaseWeChatPayAPI):
         :return: 返回的结果数据
         """
         query = {"bill_date": bill_date, "account_type": account_type, "tar_type": tar_type, "algorithm": algorithm}
-        return self._get("ecommerce/bill/fundflowbill", params=query)
+        return self._get("ecommerce/bill/fundflowbill", params=filter_none_values(query))
 
     def sub_mch_fund_flow_bill(self, sub_mchid, bill_date, account_type, algorithm="AEAD_AES_256_GCM", tar_type=None):
         """
@@ -543,7 +543,7 @@ class WeChatEcommerce(BaseWeChatPayAPI):
             "tar_type": tar_type,
             "algorithm": algorithm,
         }
-        return self._get("bill/sub-merchant-fundflowbill", params=query)
+        return self._get("bill/sub-merchant-fundflowbill", params=filter_none_values(query))
 
     def download_bill(self, url):
         """
