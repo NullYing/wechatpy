@@ -545,21 +545,14 @@ class WeChatEcommerce(BaseWeChatPayAPI):
         }
         return self._get("bill/sub-merchant-fundflowbill", params=filter_none_values(query))
 
-    def download_bill(self, url):
+    def download_bill(self, url, stream=False):
         """
         下载账单
          https://pay.weixin.qq.com/doc/v3/partner/4012124894
         :param url: 下载的账单地址，示例值:https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx
-        :return: 返回的结果数据
+        :return: 如果stream=False返回的是结果数据 为true返回的是Response对象
         """
-        return self._download_file(url).content
-
-    def download_bill_streamable(self, url, stream=False):
-        """
-        下载账单
-         https://pay.weixin.qq.com/doc/v3/partner/4012124894
-        :param url: 下载的账单地址，示例值:https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx
-               stream: 文件流下载
-        :return: 返回Response 对象
-        """
-        return self._download_file(url, stream=stream)
+        response = self._download_file(url, stream=stream)
+        if stream:
+            return response
+        return response.content

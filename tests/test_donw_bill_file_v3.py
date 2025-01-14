@@ -101,7 +101,7 @@ class DownBillFileTestCase(unittest.TestCase):
     def test_download_bill_streamable(self):
         target_file_path = os.path.join(_FIXTURE_PATH, "downloadBill.xlsx")
         with HTTMock(wechat_api_down_file_mock):
-            chunks = self.client.ecommerce.download_bill_streamable(
+            chunks = self.client.ecommerce.download_bill(
                 "https://api.mch.weixin.qq.com/v3/billdownload/file", stream=True)
             for chunk in chunks.iter_content(chunk_size=10240):
                 with open(target_file_path, "wb") as target_file:
