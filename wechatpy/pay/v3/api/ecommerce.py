@@ -552,4 +552,14 @@ class WeChatEcommerce(BaseWeChatPayAPI):
         :param url: 下载的账单地址，示例值:https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx
         :return: 返回的结果数据
         """
-        return self._download_file(url)
+        return self._download_file(url).content
+
+    def download_bill_streamable(self, url, stream=False):
+        """
+        下载账单
+         https://pay.weixin.qq.com/doc/v3/partner/4012124894
+        :param url: 下载的账单地址，示例值:https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx
+               stream: 文件流下载
+        :return: 返回Response 对象
+        """
+        return self._download_file(url, stream=stream)
