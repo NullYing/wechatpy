@@ -128,7 +128,7 @@ class WeChatPay:
         )
         kwargs["timeout"] = kwargs.get("timeout", self.timeout)
         logger.debug("Request to WeChat API: %s %s\n%s", method, url, kwargs)
-        res = self._http.request(method=method, url=url, headers=headers, **kwargs)
+        res = self._http.request(method=method, url=url, headers=headers, **kwargs, stream=True)
         res_code = res.status_code
         res_text = res.text
         if res_code != 200:
@@ -136,7 +136,7 @@ class WeChatPay:
                 raise InvalidSignatureException(res_code, res_text)
             # 返回状态码不为成功
             raise WeChatPayV3Exception(res_code, res_text)
-        return res.content
+        return res
 
     def _request(self, method, url_or_endpoint, headers=None, sign_data=None, skip_check_signature=False, **kwargs):
         if not url_or_endpoint.startswith(("http://", "https://")):

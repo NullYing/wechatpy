@@ -89,11 +89,11 @@ class DownBillFileTestCase(unittest.TestCase):
             self.assertIn("download_bill_list", response)
 
     def test_download_bill(self):
+        target_file_path = os.path.join(_FIXTURE_PATH, "downloadBill.xlsx")
+
         with HTTMock(wechat_api_down_file_mock):
-            content = self.client.ecommerce.download_bill("https://api.mch.weixin.qq.com/v3/billdownload/file")
-            target_file_path = os.path.join(_FIXTURE_PATH, "downloadBill.xlsx")
-            try:
+            chunks = self.client.ecommerce.download_bill("https://api.mch.weixin.qq.com/v3/billdownload/file")
+            for chunk in chunks.iter_content(chunk_size=10240):
                 with open(target_file_path, "wb") as target_file:
-                    target_file.write(content)
-            except Exception as e:
-                print(e)
+                    target_file.write(chunk)
+
