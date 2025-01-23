@@ -3,6 +3,7 @@ import time
 import random
 from datetime import datetime, timedelta
 
+from wechatpy.pay.utils import filter_none_values
 from wechatpy.utils import timezone
 from wechatpy.pay.v3.api.base import BaseWeChatPayAPI
 from wechatpy.utils import random_string, to_text
@@ -104,11 +105,11 @@ class WeChatPartnerOrder(BaseWeChatPayAPI):
         :param out_trade_no: 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一，详见【商户订单号】。
         :return: 返回的结果数据
         """
-        data = {
+        query = {
             "sp_mchid": self.mch_id,
             "sub_mchid": sub_mchid,
         }
-        return self._post(f"pay/partner/transactions/out-trade-no/{out_trade_no}", json=data)
+        return self._get(f"pay/partner/transactions/out-trade-no/{out_trade_no}", params=filter_none_values(query))
 
     def close(self, sub_mchid, out_trade_no):
         """
