@@ -553,3 +553,24 @@ class WeChatEcommerce(BaseWeChatPayAPI):
         :return: 返回的是Response对象
         """
         return self._download_file(url, stream=stream)
+
+    def cancel_applications(self, sub_mchid, out_apply_no, application_info):
+        """
+        提交注销申请单
+        https://pay.weixin.qq.com/doc/v3/partner/4012476217
+        :param sub_mchid: 申请注销的二级商户号
+        :param out_apply_no: 商户注销申请单号
+        :param application_info: 注销申请材料
+
+        :return: 返回的是Response对象
+        """
+        data = {
+            "sub_mchid": sub_mchid,
+            "out_apply_no": out_apply_no,
+            "application_info": application_info,
+        }
+        post_data = {}
+        for key, val in data.items():
+            if val is not None:
+                post_data[key] = val
+        return self._post("ecommerce/account/cancel-applications", json=post_data)
