@@ -32,7 +32,7 @@ class WeChatMedia(BaseWeChatPayAPI):
         :param mimetype: 文件mime type
         :return: 返回的结果数据
         """
-        meta = {"filename": file_name, "sha256": hashlib.sha256(file_bytes).hexdigest()}
+        meta = {"file_name": file_name, "sha256": hashlib.sha256(file_bytes).hexdigest()}
         data = {
             "meta": json.dumps(meta),
         }
