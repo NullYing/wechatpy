@@ -23,7 +23,7 @@ class WeChatMedia(BaseWeChatPayAPI):
             "merchant/media/upload", files=[("file", (filename, file_bytes, mimetype))], data=data, sign_data=meta
         )
 
-    def cancel_applications_upload_image(self, file_bytes, file_name, mimetype="image/jpg"):
+    def cancel_applications_upload_image(self, file_bytes, file_name, mimetype="image/jpeg"):
         """
         图片上传
         电商平台服务商调用注销申请接口时，需要先调用本接口上传相关的资料图片，获取图片ID后，再填写到注销申请请求中。
