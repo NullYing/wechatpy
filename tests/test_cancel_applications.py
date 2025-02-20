@@ -60,3 +60,15 @@ class WeChatPayTestCase(unittest.TestCase):
                 "update_time": "2023-01-20T13:29:35+08:00"
             }
             self.assertEqual(body_response, assert_body_response)
+
+    def test_query_cancel_applications(self):
+        with HTTMock(wechat_api_mock):
+            body_response = self.client.ecommerce.query_cancel_applications_by_out_apply_no(123456789)
+            assert_body_response = {
+                "out_apply_no": "abcd12345FEGH",
+                "sub_mchid": "123456789",
+                "reject_reason": "非电商服务商，无权调用此接口",
+                "cancel_state": "REVIEWING",
+                "update_time": "2023-01-20T13:29:35+08:00"
+            }
+            self.assertEqual(body_response, assert_body_response)

@@ -574,3 +574,14 @@ class WeChatEcommerce(BaseWeChatPayAPI):
             if val is not None:
                 post_data[key] = val
         return self._post("ecommerce/account/cancel-applications", json=post_data)
+
+
+    def query_cancel_applications_by_out_apply_no(self, out_apply_no):
+        """
+        查询注销申请单
+        https://pay.weixin.qq.com/doc/v3/partner/4012476223
+        :param out_apply_no: 商户注销申请单号
+
+        :return: 返回的是Response对象
+        """
+        return self._get(f"ecommerce/account/cancel-applications/out-apply-no/{out_apply_no}")
