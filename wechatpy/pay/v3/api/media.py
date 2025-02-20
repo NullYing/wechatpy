@@ -38,6 +38,5 @@ class WeChatMedia(BaseWeChatPayAPI):
         }
         return self._post(
             "ecommerce/account/cancel-applications/media",
-            files=[("file", (file_name, file_bytes, mimetype))], data=data, sign_data=meta,
-            headers={"Content-Type": "multipart/form-data"}
+            files=[("file", (file_name, file_bytes, mimetype))], data=data, sign_data=meta
         )
