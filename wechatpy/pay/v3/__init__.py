@@ -11,6 +11,7 @@ import cryptography
 import requests
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.primitives import serialization
 
 from wechatpy.exceptions import InvalidSignatureException, WeChatPayV3Exception
 from wechatpy.pay.v3.api.base import BaseWeChatPayAPI
@@ -96,11 +97,12 @@ class WeChatPay:
         self.skip_check_signature = skip_check_signature
         self._http = requests.Session()
 
+        # 证书内存缓存
+        self.wechat_cert_dict = {}
+
         if self.public_key_path and self.public_key_id:
             self.load_public_key()
 
-        # 证书内存缓存
-        self.wechat_cert_dict = {}
         self.load_wechat_cert()
 
         with open(self.apiclient_key_path, "rb") as f:
@@ -186,7 +188,10 @@ class WeChatPay:
         )
         if skip_check_signature is False and self.skip_check_signature is False:
             # 跳过，首次获取证书的时候不需要这个
-            headers.update({"Wechatpay-Serial": get_serial_no(self._get_wechat_cert())})
+            if self.public_key_id:
+                headers.update({"Wechatpay-Serial": self.public_key_id})
+            else:
+                headers.update({"Wechatpay-Serial": get_serial_no(self._get_wechat_cert())})
 
         kwargs["timeout"] = kwargs.get("timeout", self.timeout)
         logger.debug("Request to WeChat API: %s %s\n%s", method, url, kwargs)
@@ -281,7 +286,7 @@ class WeChatPay:
     def load_public_key(self):
         with open(self.public_key_path, "rb") as f:
             public_key = f.read()
-        certificate = load_pem_x509_certificate(data=public_key, backend=default_backend())
+        certificate = serialization.load_pem_public_key(public_key)
         self.wechat_cert_dict[self.public_key_id] = certificate
 
     def _get_wechat_cert(self):
