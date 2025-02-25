@@ -45,6 +45,8 @@ class WeChatPay:
     :param apiclient_key_path: 必填，商户证书私钥路径
     :param wechat_cert_dir: 必填，微信证书保存文件夹
     :param timeout: 可选，请求超时时间，单位秒，默认无超时设置
+    :param public_key_id: 公钥模式证书id
+    :param public_key_path: 公钥路径
     """
 
     # 媒体文件接口
@@ -77,18 +79,25 @@ class WeChatPay:
         wechat_cert_dir=None,
         timeout=None,
         sub_appid=None,
+        public_key_id=None,
+        public_key_path=None,
         skip_check_signature=False,
     ):
         self.appid = appid
         self.sub_appid = sub_appid
         self.apiv3_key = apiv3_key
         self.mch_id = mch_id
+        self.public_key_id = public_key_id
+        self.public_key_path = public_key_path
         self.apiclient_cert_path = apiclient_cert_path
         self.apiclient_key_path = apiclient_key_path
         self.wechat_cert_dir = wechat_cert_dir
         self.timeout = timeout
         self.skip_check_signature = skip_check_signature
         self._http = requests.Session()
+
+        if self.public_key_path and self.public_key_id:
+            self.load_public_key()
 
         # 证书内存缓存
         self.wechat_cert_dict = {}
@@ -219,7 +228,7 @@ class WeChatPay:
 
     def update_certificates(self, skip_check_signature=False):
         """
-        获取证书，该接口需要定期执行
+        平台证书模式，获取证书，该接口需要定期执行;微信支付建议使用公钥模式代替
 
         :param: skip_check_signature: 首次下载证书需要跳过签名，或请提前使用微信工具下载证书
         :return: 返回的结果数据
@@ -254,9 +263,11 @@ class WeChatPay:
             self.wechat_cert_dict[serial_no] = new_cert
 
     def get_cert_path(self, serial_no):
+        """平台证书模式"""
         return os.path.join(self.wechat_cert_dir, "wechatpy_" + serial_no + ".pem")
 
     def load_wechat_cert(self):
+        """平台证书模式"""
         dirs = os.listdir(self.wechat_cert_dir)
         for file in dirs:
             if file.startswith("wechatpy_"):
@@ -267,9 +278,17 @@ class WeChatPay:
                 certificate = load_pem_x509_certificate(data=cert_file, backend=default_backend())
                 self.wechat_cert_dict[serial_no] = certificate
 
+    def load_public_key(self):
+        with open(self.public_key_path, "rb") as f:
+            public_key = f.read()
+        certificate = load_pem_x509_certificate(data=public_key, backend=default_backend())
+        self.wechat_cert_dict[self.public_key_id] = certificate
+
     def _get_wechat_cert(self):
         if len(self.wechat_cert_dict.keys()) == 0:
             raise WeChatPayV3Exception(code=0, message="请先加载微信证书")
+        if self.public_key_id:
+            return self.wechat_cert_dict.get(self.public_key_id)
         certificate = list(self.wechat_cert_dict.values())[0]
         return certificate
 
