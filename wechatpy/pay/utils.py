@@ -16,6 +16,7 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.exceptions import InvalidSignature, InvalidTag
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.hashes import SHA256
 
@@ -213,7 +214,11 @@ def rsa_public_encrypt(data, certificate):
     :return: 如果 b64_encode=True 的话，返回加密并 base64 处理后的 string；否则返回加密后的 binary
     """
     encoded_data = to_binary(data)
-    public_key = certificate.public_key()
+    if isinstance(certificate, RSAPublicKey):
+      public_key = certificate
+    else:
+      public_key = certificate.public_key()
+
     encrypted_data = public_key.encrypt(
         encoded_data,
         padding=padding.OAEP(
