@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-    wechatpy.exceptions
-    ~~~~~~~~~~~~~~~~~~~~
+wechatpy.exceptions
+~~~~~~~~~~~~~~~~~~~~
 
-    Basic exceptions definition.
+Basic exceptions definition.
 
-    :copyright: (c) 2014 by messense.
-    :license: MIT, see LICENSE for more details.
+:copyright: (c) 2014 by messense.
+:license: MIT, see LICENSE for more details.
 """
 
 
@@ -127,6 +127,7 @@ class WeChatPayV3Exception(WeChatClientException):
         client=None,
         request=None,
         response=None,
+        request_id=None,
     ):
         """
         :param code: 返回状态码
@@ -135,9 +136,10 @@ class WeChatPayV3Exception(WeChatClientException):
         super().__init__(code, message, client, request, response)
         self.code = code
         self.message = message
+        self.request_id = request_id
 
     def __str__(self):
-        _str = f"Error code: {self.code}, message: {self.message}"
+        _str = f"Error code: {self.code}, message: {self.message}, request_id: {self.request_id}"
         return _str
 
     def __repr__(self):
