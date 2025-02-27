@@ -311,6 +311,11 @@ class WeChatPay:
         nonce_str = headers.get("Wechatpay-Nonce")
         signature = headers.get("Wechatpay-Signature")
         serial_no = headers.get("Wechatpay-Serial")
+        wechatpay_serial = headers.get("Wechatpay-Serial")
+        #兼容切换微信公钥
+        public_key = self.wechat_cert_dict.get(self.public_key_id)
+        if self.public_key_id and wechatpay_serial == self.public_key_id and public_key:
+            return check_rsa_signature(public_key, timestamp, nonce_str, response_body, signature)
 
         certificate = self.wechat_cert_dict.get(serial_no)
         if not certificate:
