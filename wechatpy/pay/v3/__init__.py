@@ -212,13 +212,14 @@ class WeChatPay:
             logger.debug("WeChat payment result json parsing error", exc_info=True)
             return res.text
 
+        request_id = res.headers.get("request-id")
         code = data.get("code")
         message = data.get("message")
         if code:
             if code == "SIGN_ERROR":
                 raise InvalidSignatureException(code, message)
             # 返回状态码不为成功
-            raise WeChatPayV3Exception(code, message)
+            raise WeChatPayV3Exception(code, message, response=res, request_id=request_id)
 
         if self.skip_check_signature is False and self.check_response_signature(res.headers, res.text) is False:
             raise InvalidSignatureException()
