@@ -184,7 +184,10 @@ def check_rsa_signature(certificate, timestamp, nonce_str, response_body, signat
     sign_str = f"{timestamp}\n{nonce_str}\n{response_body}\n"
     message = sign_str.encode("UTF-8")
     signature = base64.b64decode(signature)
-    public_key = certificate.public_key()
+    if isinstance(certificate, RSAPublicKey):
+      public_key = certificate
+    else:
+      public_key = certificate.public_key()
     try:
         public_key.verify(signature, message, padding.PKCS1v15(), SHA256())
     except InvalidSignature:
