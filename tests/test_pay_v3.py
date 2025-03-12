@@ -110,3 +110,15 @@ class WeChatPayTestCase(unittest.TestCase):
             response = self.client.ecommerce.merchant_balance_query()
             self.assertIn("available_amount", response)
             self.assertIn("pending_amount", response)
+
+    def test_receivers_add(self):
+        with HTTMock(wechat_api_mock):
+            response = self.client.ecommerce.receivers_add("MERCHANT_ID", 110, "DISTRIBUTOR")
+            self.assertIn("type", response)
+            self.assertIn("account", response)
+
+    def test_receivers_delete(self):
+        with HTTMock(wechat_api_mock):
+            response = self.client.ecommerce.receivers_delete("MERCHANT_ID", 110)
+            self.assertIn("type", response)
+            self.assertIn("account", response)
