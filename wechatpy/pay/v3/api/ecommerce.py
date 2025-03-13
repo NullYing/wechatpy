@@ -585,3 +585,40 @@ class WeChatEcommerce(BaseWeChatPayAPI):
         :return: 返回的是Response对象
         """
         return self._get(f"ecommerce/account/cancel-applications/out-apply-no/{out_apply_no}")
+
+    def receivers_add(self, type, account, relation_type, appid=None, name=None):
+        """
+        添加分账接受方
+        https://pay.weixin.qq.com/doc/v3/partner/4012477758
+        :param type: 分账接收方的类型，枚举值：MERCHANT_ID：商户 PERSONAL_OPENID：个人
+        :param account: 分账接收方的账号
+        :param relation_type: 子商户与接收方的关系。 本字段值为枚举： SUPPLIER：供应商 DISTRIBUTOR：分销商 SERVICE_PROVIDER：服务商 PLATFORM：平台 OTHERS：其他
+        :param name:【接收方名称】商户全称。仅接收方类型是MERCHANT_ID时，才需要填写此字段。
+        :param appid:【公众账号ID】微信分配的公众账号ID
+        :return: 返回的是Response对象
+        """
+        data = {
+            "type": type,
+            "account": account,
+            "relation_type": relation_type,
+            "appid": appid,
+            "name": name,
+        }
+        return self._post(f"ecommerce/profitsharing/receivers/add", json=filter_none_values(data))
+
+
+    def receivers_delete(self, type, account, appid=None):
+        """
+        删除分账接受方
+        https://pay.weixin.qq.com/doc/v3/partner/4012477759
+        :param type: 分账接收方的类型，枚举值：MERCHANT_ID：商户 PERSONAL_OPENID：个人
+        :param account: 分账接收方的账号
+        :param appid:【公众账号ID】微信分配的公众账号ID
+        :return: 返回的是Response对象
+        """
+        data = {
+            "type": type,
+            "account": account,
+            "appid": appid,
+        }
+        return self._post(f"ecommerce/profitsharing/receivers/delete", json=filter_none_values(data))
