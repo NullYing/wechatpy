@@ -80,6 +80,9 @@ class WeChatServiceClient(BaseWeChatClient):
         else:
             url = url_or_endpoint
 
+        if self._http.proxies:
+            kwargs["proxies"] = self._http.proxies
+
         if "params" not in kwargs:
             kwargs["params"] = {}
         if isinstance(kwargs["params"], dict) and "suite_access_token" not in kwargs["params"]:
